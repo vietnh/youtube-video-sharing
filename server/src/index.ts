@@ -1,10 +1,15 @@
+import 'reflect-metadata';
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { connect } from './database';
-import { login } from './controllers/auth';
+import { IAuthenticationController } from './controllers/authenticationController';
 import { validateToken } from './middlewares/authentication';
+import bodyParser from 'body-parser';
+import container from './container';
+import Types from './types';
+import { IVideoController } from './controllers/videosController';
 
-const connectionString = 'mongodb://mongodb:27017/youtube-sharing';
+const connectionString = 'mongodb://127.0.0.1:27017/youtube-sharing';
 connect(connectionString);
 
 dotenv.config();
@@ -12,15 +17,20 @@ dotenv.config();
 const app: Express = express();
 const port = '3001';
 
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const videoController = container.get<IVideoController>(Types.VideoController);
+const authenticationController = container.get<IAuthenticationController>(Types.AuthenticationController);
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.post('/login', login);
+app.post('/login', authenticationController.login);
 
-app.get('/videos', validateToken, (req: Request, res: Response) => {
-  res.send(mockVideos);
-});
+app.get('/videos', validateToken, videoController.getVideos);
+app.post('/videos', validateToken, videoController.shareVideo);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
@@ -34,30 +44,3 @@ export interface Video {
   shared_by: string;
   shared_at: string;
 }
-
-const mockVideos: Video[] = [
-  {
-    id: 1,
-    url: 'https://youtu.be/uCXZOylfOc4',
-    title: 'test video 1',
-    description: 'test video 1',
-    shared_by: 'test_user_1@yopmail.com',
-    shared_at: '2021-09-01T00:00:00.000Z',
-  },
-  {
-    id: 2,
-    url: 'https://youtu.be/3yLqJZyOcjc',
-    title: 'test video 2',
-    description: 'test video 2',
-    shared_by: 'test_user_2@yopmail.com',
-    shared_at: '2021-09-02T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    url: 'https://youtu.be/NjijSB4bpwU',
-    title: 'test video 3',
-    description: 'test video 3',
-    shared_by: 'test_user_3@yopmail.com',
-    shared_at: '2021-09-03T00:00:00.000Z',
-  }
-]
