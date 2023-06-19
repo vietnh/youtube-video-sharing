@@ -1,8 +1,10 @@
 FROM node:18
 
-WORKDIR /app
+WORKDIR /server
 
-COPY package*.json ./
+COPY *.json ./
+
+RUN ls -al
 
 RUN npm ci
 

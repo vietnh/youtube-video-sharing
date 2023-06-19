@@ -2,5 +2,6 @@
 
 # dependencies
 /server/node_modules
+/server/build
 /youtube-sharing/node_modules
 /youtube-sharing/.next
