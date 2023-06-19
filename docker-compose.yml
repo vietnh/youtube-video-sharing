@@ -11,6 +11,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/youtube-sharing
   # app:
   #   build:
   #     context: ./youtube-sharing

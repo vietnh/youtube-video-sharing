@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Date } from 'mongoose';
 
 export interface IVideoProperties {
-  url: string;
+  videoId: string;
   title: string;
   description: string;
   shared_by: string;
@@ -11,7 +11,7 @@ export interface IVideoProperties {
 export interface IVideo extends IVideoProperties, Document {}
 
 const VideoSchema = new Schema<IVideo>({
-  id: {
+  videoId: {
     type: String,
     required: true,
     unique: true,

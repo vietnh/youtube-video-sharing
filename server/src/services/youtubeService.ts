@@ -1,9 +1,10 @@
-import { injectable } from "inversify";
+import { injectable } from 'inversify';
+import fetch from 'node-fetch';
 
 const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3';
 
 export interface IYoutubeService {
-  getVideoInfo(url: string): Promise<{ title: string; description: string }>;
+  getVideoInfo(url: string): Promise<{ videoId: string, title: string; description: string }>;
 }
 
 @injectable()
@@ -15,7 +16,7 @@ export class YoutubeService implements IYoutubeService {
 
   async getVideoInfo(
     url: string
-  ): Promise<{ title: string; description: string }> {
+  ): Promise<{ videoId: string; title: string; description: string }> {
     const videoId = this.getYouTubeVideoId(url);
     if (!videoId) throw new Error('Invalid YouTube URL');
 
@@ -26,7 +27,7 @@ export class YoutubeService implements IYoutubeService {
     const title = data.items[0].snippet.title;
     const description = data.items[0].snippet.description;
 
-    return { title, description };
+    return { videoId, title, description };
   }
 
   private getYouTubeVideoId = (url: string) => {
