@@ -7,7 +7,7 @@ export interface IAuthRequest extends Request {
 }
 
 export async function authenticationMiddleware(req: IAuthRequest, res: Response, next: NextFunction) {
-  if (req.path === '/login') {
+  if (req.path === '/login' || req.path === '/videos') {
     return next();
   }
 

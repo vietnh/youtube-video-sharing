@@ -10,6 +10,7 @@ import container from './container';
 import Types from './types';
 import { IVideoController } from './controllers/videosController';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -18,6 +19,11 @@ connect(process.env.MONGO_URI as string);
 const app: Express = express();
 const port = '3001';
 
+app.use(cors({
+  origin: process.env.APP_URI,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(authenticationMiddleware);

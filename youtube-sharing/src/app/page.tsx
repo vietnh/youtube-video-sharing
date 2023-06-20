@@ -1,13 +1,9 @@
-import { Video } from "./api/videos/route"
+import { Video } from "./interfaces/video"
+import client from "./lib/api";
 import VideoInfo from "./widgets/VideoInfo"
 
 export default async function Home() {
-  const data = await getVideos();
+  const data = await client.get<Video[]>('/videos');
 
-  return <ul>{data.map(video => (<li key={video.id}><VideoInfo video={video} /></li>))}</ul>
-}
-
-async function getVideos(): Promise<Video[]> {
-  const res = await fetch(`${process.env.API_URL}/videos`)
-  return res.json()
+  return <ul>{data.map((video, index) => (<li key={index}><VideoInfo video={video} /></li>))}</ul>
 }

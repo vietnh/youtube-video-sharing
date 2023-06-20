@@ -35,6 +35,6 @@ export class AuthenticationController implements IAuthenticationController {
     });
     console.log('Loged in successfully. Token: ', token);
 
-    return res.json({ token });
+    return res.json({ token, user: { email: user.email } });
   };
 }
