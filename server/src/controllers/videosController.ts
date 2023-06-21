@@ -4,6 +4,7 @@ import { inject, injectable } from 'inversify';
 import Types from '../types';
 import { IYoutubeService } from '../services/youtubeService';
 import { IAuthRequest } from '../middlewares/authenticationMiddleware';
+import { getSocket } from '../socket';
 
 export interface IVideoController {
   shareVideo(req: IAuthRequest, res: Response): Promise<Response>;
@@ -46,6 +47,12 @@ export class VideoController implements IVideoController {
       sharedBy: req.user!.email,
     });
     await video.save();
+
+    const io = getSocket();
+    io.sockets.emit('new-video-shared', {
+      email: req.user!.email,
+      message: video.title,
+    });
 
     return res.json('successful');
   };

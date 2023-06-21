@@ -10,18 +10,17 @@ import container from './container';
 import Types from './types';
 import { IVideoController } from './controllers/videosController';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
-import { Server } from 'socket.io';
 import http from 'http';
+import { setupSocket } from './socket';
 
 dotenv.config();
 
-connect(process.env.MONGO_URI as string);
-
 const app: Express = express();
 const port = '3001';
-
 const server = http.createServer(app);
-const io = new Server(server);
+
+connect(process.env.MONGO_URI as string);
+setupSocket(server);
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,19 +43,6 @@ app.post('/login', authenticationController.login);
 
 app.get('/videos', videoController.getVideos);
 app.post('/videos', authenticationMiddleware, videoController.shareVideo);
-
-io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
-  socket.on('message', (data) => {
-    console.log('Message received:', data);
-    io.except(socket.id).emit('message', data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('A user disconnected:', socket.id);
-  });
-});
 
 server.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
