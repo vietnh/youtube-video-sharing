@@ -1,5 +1,7 @@
 import Cookies from 'js-cookie';
 
+const LOCALHOST  = 'http://localhost:3000/api';
+
 const getOptions = (options?: RequestInit) => {
   const token = Cookies.get('token');
 
@@ -7,6 +9,7 @@ const getOptions = (options?: RequestInit) => {
     ...options,
     headers: {
       'Cache-Control': 'no-cache',
+      SameSite: 'Strict',
       ...options?.headers,
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
@@ -17,14 +20,14 @@ const getOptions = (options?: RequestInit) => {
 const client = {
   get: async <R>(path: string) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${path}`,
+      `${LOCALHOST}${path}`,
       getOptions()
     );
     return <R>res.json();
   },
   post: async <R>(path: string, body: unknown) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${path}`,
+      `${LOCALHOST}${path}`,
       getOptions({
         method: 'POST',
         body: JSON.stringify(body),

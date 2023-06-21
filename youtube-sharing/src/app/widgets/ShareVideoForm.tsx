@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import Button from '../components/Button';
 import client from '../lib/api';
+import socket from '../lib/socket';
+import Cookie from 'js-cookie';
 
 export default function ShareForm() {
   const [url, setUrl] = useState('');
@@ -10,6 +12,7 @@ export default function ShareForm() {
       url,
     });
     console.log(res);
+    socket.emit('message', `${Cookie.get('email')} shared a video: ${url}`)
   };
 
   return (

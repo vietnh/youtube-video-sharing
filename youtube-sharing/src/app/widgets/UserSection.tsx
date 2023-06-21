@@ -5,12 +5,28 @@ import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import client from '../lib/api';
 import Cookie from 'js-cookie';
-import { isAuthenticated } from '../lib/auth';
+import { useCookie } from '../lib/auth';
 import { useRouter } from 'next/navigation';
 
 // since I use this component in the layout, I need to make sure it doesn't render on the server
 export default function UserSection() {
   const [shouldRender, setShouldRender] = useState(false);
+  const [token, storeToken, clearToken] = useCookie('token');
+  const [email, storeEmail, clearEmail] = useCookie('email');
+
+  const login = async (email: string, password: string) => {
+    const res = await client.post<{ token: string; user: { email: string } }>(
+      '/login',
+      { email, password }
+    );
+    storeToken(res.token);
+    storeEmail(res.user.email);
+  };
+
+  const logout = () => {
+    clearToken();
+    clearEmail();
+  };
 
   useEffect(() => {
     setShouldRender(true);
@@ -20,21 +36,16 @@ export default function UserSection() {
     return null;
   }
 
-  return isAuthenticated() ? <LoggedIn /> : <Login />;
+  return token ? <LoggedIn onLogout={logout} /> : <Login onLogin={login} />;
 }
 
-function Login() {
+function Login({
+  onLogin,
+}: {
+  onLogin: (email: string, password: string) => void;
+}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const login = async () => {
-    const res = await client.post<{ token: string; user: { email: string } }>(
-      '/login',
-      { email, password }
-    );
-    Cookie.set('token', res.token, { expires: 1 });
-    Cookie.set('email', res.user.email, { expires: 1 });
-  };
 
   return (
     <div className="flex items-center md:ml-6 gap-3">
@@ -54,25 +65,21 @@ function Login() {
       />
 
       <div className="relative">
-        <Button onClick={() => login()}>Login</Button>
+        <Button onClick={() => onLogin(email, password)}>Login</Button>
       </div>
     </div>
   );
 }
 
-function LoggedIn() {
+function LoggedIn({ onLogout }: { onLogout: () => void }) {
   const router = useRouter();
-  const email = Cookie.get('email');
-  const logout = () => {
-    Cookie.remove('token');
-    Cookie.remove('email');
-  };
+  const [email] = useCookie('email');
 
   return (
     <div className="flex items-center md:ml-6 gap-3">
       <p className="text-white">Welcome {email}</p>
       <Button onClick={() => router.push('/share')}>Share a movie</Button>
-      <Button onClick={() => logout()}>Logout</Button>
+      <Button onClick={() => onLogout()}>Logout</Button>
     </div>
   );
 }

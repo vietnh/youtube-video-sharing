@@ -33,7 +33,7 @@ export class AuthenticationController implements IAuthenticationController {
     const token = jwt.sign(payload, process.env.JWT_TOKEN as string, {
       expiresIn: '1h',
     });
-    console.log('Loged in successfully. Token: ', token);
+    console.log('Logged in successfully. Token: ', token);
 
     return res.json({ token, user: { email: user.email } });
   };

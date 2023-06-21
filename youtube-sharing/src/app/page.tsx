@@ -6,7 +6,6 @@ import VideoInfo from './widgets/VideoInfo';
 
 export default async function Home() {
   const data = await client.get<Video[]>('/videos');
-  console.log('videos: ', data);
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center">
