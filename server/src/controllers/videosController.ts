@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import Video, { IVideoProperties } from '../models/Video';
+import Video, { IVideo, IVideoProperties } from '../models/Video';
 import { inject, injectable } from 'inversify';
 import Types from '../types';
 import { IYoutubeService } from '../services/youtubeService';
@@ -20,13 +20,16 @@ export class VideoController implements IVideoController {
     req: IAuthRequest,
     res: Response<any, Record<string, any>>
   ): Promise<Response> => {
-    const videos = (await Video.find()).map<IVideoProperties>((video) => ({
+    const videos = (
+      await Video.find().sort({ createdAt: -1 })
+    ).map<IVideoProperties>((video: IVideo) => ({
       videoId: video.videoId,
       title: video.title,
       description: video.description,
-      shared_by: video.shared_by,
-      shared_at: video.shared_at,
+      sharedBy: video.sharedBy,
+      createdAt: video.createdAt,
     }));
+
     return res.json(videos);
   };
 
@@ -36,14 +39,13 @@ export class VideoController implements IVideoController {
   ): Promise<Response> => {
     const { url } = req.body;
     const videoInfo = await this.youtubeService.getVideoInfo(url);
-
-    await Video.create({
+    const video = new Video({
       videoId: videoInfo.videoId,
       title: videoInfo.title,
       description: videoInfo.description,
-      shared_by: req.user!.email,
-      shared_at: new Date(),
+      sharedBy: req.user!.email,
     });
+    await video.save();
 
     return res.json('successful');
   };

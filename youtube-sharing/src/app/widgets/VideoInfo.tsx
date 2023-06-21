@@ -8,7 +8,7 @@ export interface YouTubePlayerProps {
 }
 
 export default function VideoInfo({ video }: YouTubePlayerProps) {
-  const { videoId, title, description, shared_by } = video;
+  const { videoId, title, description, sharedBy } = video;
 
   return (
     <div className="flex flex-row">
@@ -17,7 +17,7 @@ export default function VideoInfo({ video }: YouTubePlayerProps) {
     </div>
     <div className="w-1/2 p-4 flex flex-col">
         <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-lg">Shared by: {shared_by}</p>
+        <p className="text-lg">Shared by: {sharedBy}</p>
         <p className="text-lg">Description: </p>
         <p className="text-lg overflow-y-auto h-80">{description}</p>
       </div>

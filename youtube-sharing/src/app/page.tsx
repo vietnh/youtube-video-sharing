@@ -1,9 +1,18 @@
-import { Video } from "./interfaces/video"
-import client from "./lib/api";
-import VideoInfo from "./widgets/VideoInfo"
+export const fetchCache = 'default-no-store';
+
+import { Video } from './interfaces/video';
+import client from './lib/api';
+import VideoInfo from './widgets/VideoInfo';
 
 export default async function Home() {
   const data = await client.get<Video[]>('/videos');
+  console.log('videos: ', data);
 
-  return <ul>{data.map((video, index) => (<li key={index}><VideoInfo video={video} /></li>))}</ul>
+  return (
+    <div className="flex flex-col gap-4 items-center justify-center">
+      {data.map((video, index) => (
+        <VideoInfo video={video} key={index} />
+      ))}
+    </div>
+  );
 }

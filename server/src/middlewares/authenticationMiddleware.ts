@@ -7,10 +7,6 @@ export interface IAuthRequest extends Request {
 }
 
 export async function authenticationMiddleware(req: IAuthRequest, res: Response, next: NextFunction) {
-  if (req.path === '/login' || req.path === '/videos') {
-    return next();
-  }
-
   const token = req.header('Authorization');
   if (!token || !token.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'No token or token is in invalid format, authorization denied' });

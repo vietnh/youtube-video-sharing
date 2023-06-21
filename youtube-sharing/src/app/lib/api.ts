@@ -6,6 +6,7 @@ const getOptions = (options?: RequestInit) => {
   return {
     ...options,
     headers: {
+      'Cache-Control': 'no-cache',
       ...options?.headers,
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),

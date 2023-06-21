@@ -21,13 +21,19 @@ const port = '3001';
 
 app.use(cors({
   origin: process.env.APP_URI,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
   credentials: true,
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(authenticationMiddleware);
 app.use(errorHandlerMiddleware);
+// Middleware to prevent caching for all routes
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  next();
+});
+
 
 const videoController = container.get<IVideoController>(Types.VideoController);
 const authenticationController = container.get<IAuthenticationController>(Types.AuthenticationController);
@@ -39,7 +45,7 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/login', authenticationController.login);
 
 app.get('/videos', videoController.getVideos);
-app.post('/videos', videoController.shareVideo);
+app.post('/videos', authenticationMiddleware, videoController.shareVideo);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

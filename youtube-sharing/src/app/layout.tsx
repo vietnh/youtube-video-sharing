@@ -2,6 +2,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { Header } from './components/Header';
 import UserSection from './widgets/UserSection';
+import PageLayout from './components/PageLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,13 +12,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className="h-full bg-gray-100">
-      <body className="h-full">
-          <div className="min-h-full">
+    <html>
+      <body>
+          <div className="min-h-full bg-gray-100">
             <Header right={<UserSection />} />
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-              {children}
-            </main>
+            <PageLayout>{children}</PageLayout>
           </div>
       </body>
     </html>
