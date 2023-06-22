@@ -8,7 +8,6 @@ export async function connect(uri: string): Promise<void> {
     });
     console.log('MongoDB connected');
 
-    await createDefaultUsers();
     console.log('Default data successfully created');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);

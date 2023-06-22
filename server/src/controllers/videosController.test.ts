@@ -7,15 +7,19 @@ import { IAuthRequest } from '../middlewares/authenticationMiddleware';
 jest.mock('../models/Video');
 jest.mock('../socket');
 
+const mockResponse = (): Partial<Response> => {
+  return {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+  };
+};
+
 describe('VideoController', () => {
   const youtubeService: IYoutubeService = {
     getVideoInfo: jest.fn(),
   };
   const videoController: IVideoController = new VideoController(youtubeService);
   let req = {} as IAuthRequest;
-  let res = {
-    json: jest.fn(),
-  } as unknown as Response;
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -23,6 +27,7 @@ describe('VideoController', () => {
 
   describe('getVideos', () => {
     it('should return a list of videos', async () => {
+      const res = mockResponse() as Response;
       const mockVideos: IVideoProperties[] = [
         {
           videoId: '123',
@@ -51,6 +56,7 @@ describe('VideoController', () => {
 
   describe('shareVideo', () => {
     it('should share a new video', async () => {
+      const res = mockResponse() as Response;
       const videoInfo = {
         videoId: '123',
         title: 'Test Video 1',
@@ -81,6 +87,7 @@ describe('VideoController', () => {
     });
 
     it('should handle the exception thrown by youtubeService', async () => {
+      const res = mockResponse() as Response;
       const errorMessage = 'Invalid YouTube URL';
       jest.spyOn(youtubeService, 'getVideoInfo').mockImplementation(() => {
         throw new Error(errorMessage);

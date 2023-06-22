@@ -39,20 +39,24 @@ export class VideoController implements IVideoController {
     res: Response<any, Record<string, any>>
   ): Promise<Response> => {
     const { url } = req.body;
-    const videoInfo = await this.youtubeService.getVideoInfo(url);
-    const video = new Video({
-      videoId: videoInfo.videoId,
-      title: videoInfo.title,
-      description: videoInfo.description,
-      sharedBy: req.user!.email,
-    });
-    await video.save();
+    try {
+      const videoInfo = await this.youtubeService.getVideoInfo(url);
+      const video = new Video({
+        videoId: videoInfo.videoId,
+        title: videoInfo.title,
+        description: videoInfo.description,
+        sharedBy: req.user!.email,
+      });
+      await video.save();
 
-    const io = getSocket();
-    io.sockets.emit('new-video-shared', {
-      email: req.user!.email,
-      message: videoInfo.title,
-    });
+      const io = getSocket();
+      io.sockets.emit('new-video-shared', {
+        email: req.user!.email,
+        message: videoInfo.title,
+      });
+    } catch (error) {
+      return res.status(400).json({ message: (error as Error).message });
+    }
 
     return res.json('successful');
   };
