@@ -10,8 +10,9 @@ This website allows users to share their favorite YouTube videos with others. It
 3. [Technology Stack](#technology-stack)
 4. [Prerequisites](#prerequisites)
 5. [Installation](#installation)
-6. [Deployment](#deployment)
-7. [Usage](#usage)
+6. [Testing](#testing)
+7. [Deployment](#deployment)
+8. [Usage](#usage)
 
 ## Live Version
 
@@ -101,6 +102,24 @@ npm run dev
 ```
 
 The frontend should now be running at `http://localhost:3000`.
+
+## Testing
+
+This project uses [Jest](https://jestjs.io/) as the testing framework for both unit and integration tests. The tests are organized into two categories:
+
+### Unit Tests
+
+Unit tests are designed to test individual components of the application, such as controllers. These tests use mock database connections, sockets, and services to ensure that the focus is solely on the functionality of the component.
+
+Unit tests are placed in `tests/unit` folder.
+
+### Integration Tests
+
+Integration tests aim to test the application as a whole, focusing on how different components work together. In these tests, a real server is running on a separate port (3002), a separate database instance is used, and real sockets and services are employed. The purpose of integration tests is to ensure that the application works correctly in a real environment.
+
+Data is wiped out after each test to provide a clean slate for the next test scenario.
+
+Integration tests are placed in `tests/integration` folder.
 
 ## Deployment
 

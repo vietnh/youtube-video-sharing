@@ -2,8 +2,8 @@ import { Response } from 'express';
 import {
   AuthenticationController,
   ILoginRequest,
-} from './authenticationController';
-import User from '../models/User';
+} from '../../controllers/authenticationController';
+import User from '../../models/User';
 import bcrypt from 'bcrypt';
 
 process.env.JWT_TOKEN = 'test_jwt_secret';

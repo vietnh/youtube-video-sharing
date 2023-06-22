@@ -4,8 +4,8 @@ import request from 'supertest';
 import dotenv from 'dotenv';
 import app, { server } from './app';
 import mongoose from 'mongoose';
-import { createDefaultUsers } from '../scripts/defaultUsers';
-import Video from '../models/Video';
+import { createDefaultUsers } from '../../scripts/defaultUsers';
+import Video from '../../models/Video';
 
 dotenv.config();
 

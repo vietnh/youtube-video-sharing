@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import 'express-async-errors';
 import dotenv from 'dotenv';
 import container from './container';
-import createApp from '../appFactory';
+import createApp from '../../appFactory';
 
 dotenv.config();
 

@@ -1,11 +1,11 @@
-import { VideoController, IVideoController } from './videosController';
-import { IYoutubeService } from '../services/youtubeService';
-import Video, { IVideoProperties } from '../models/Video';
+import { VideoController, IVideoController } from '../../controllers/videosController';
+import { IYoutubeService } from '../../services/youtubeService';
+import Video, { IVideoProperties } from '../../models/Video';
 import { Response } from 'express';
-import { IAuthRequest } from '../middlewares/authenticationMiddleware';
+import { IAuthRequest } from '../../middlewares/authenticationMiddleware';
 
-jest.mock('../models/Video');
-jest.mock('../socket');
+jest.mock('../../models/Video');
+jest.mock('../../socket');
 
 const mockResponse = (): Partial<Response> => {
   return {
@@ -72,7 +72,7 @@ describe('VideoController', () => {
           emit: jest.fn(),
         },
       };
-      jest.spyOn(require('../socket'), 'getSocket').mockReturnValue(io);
+      jest.spyOn(require('../../socket'), 'getSocket').mockReturnValue(io);
       Video.prototype.save = jest.fn().mockResolvedValue(undefined);
 
       await videoController.shareVideo(req, res);

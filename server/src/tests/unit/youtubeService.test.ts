@@ -1,5 +1,5 @@
 import fetch, { Response } from 'node-fetch';
-import { YoutubeService } from './youtubeService';
+import { YoutubeService } from '../../services/youtubeService';
 
 jest.mock('node-fetch');
 
