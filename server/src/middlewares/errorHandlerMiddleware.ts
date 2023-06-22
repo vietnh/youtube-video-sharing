@@ -6,6 +6,6 @@ export async function errorHandlerMiddleware(
   res: Response,
   _next: NextFunction
 ) {
-  console.error(error);
+  console.error("Unexpected exception: ", error);
   res.status(500).json({ message: 'Something went wrong' });
 }

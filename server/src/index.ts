@@ -44,6 +44,10 @@ app.post('/login', authenticationController.login);
 app.get('/videos', videoController.getVideos);
 app.post('/videos', authenticationMiddleware, videoController.shareVideo);
 
+app.use(errorHandlerMiddleware);
+
 server.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
+
+export default app;

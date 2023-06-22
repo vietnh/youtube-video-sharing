@@ -51,7 +51,7 @@ export class VideoController implements IVideoController {
     const io = getSocket();
     io.sockets.emit('new-video-shared', {
       email: req.user!.email,
-      message: video.title,
+      message: videoInfo.title,
     });
 
     return res.json('successful');

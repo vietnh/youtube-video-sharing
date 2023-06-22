@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User, { IUserProperties } from '../models/User';
 import { injectable } from 'inversify';
 
-interface ILoginRequest extends Request {
+export interface ILoginRequest extends Request {
   body: IUserProperties;
 }
 
