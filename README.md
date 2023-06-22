@@ -69,11 +69,11 @@ npm install
 
 3. Create a `.env` file in the `server` directory and add the following environment variables:
 
-```
+````
 JWT_TOKEN=myyoutubesharingappjwtsecret
 YOUTUBE_API_KEY=<your_google_api>
 MONGO_URI=mongodb://localhost:27017/youtube-sharing
-```
+````
 
 4. Start the server:
 
