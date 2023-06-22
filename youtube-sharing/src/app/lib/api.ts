@@ -1,13 +1,12 @@
 import Cookies from 'js-cookie';
 
-const LOCALHOST  = 'http://localhost:3000/api';
-
 const getOptions = (options?: RequestInit) => {
   const token = Cookies.get('token');
 
   return {
     ...options,
     headers: {
+      cache: 'no-store',
       'Cache-Control': 'no-cache',
       SameSite: 'Strict',
       ...options?.headers,
@@ -19,15 +18,12 @@ const getOptions = (options?: RequestInit) => {
 
 const client = {
   get: async <R>(path: string) => {
-    const res = await fetch(
-      `${LOCALHOST}${path}`,
-      getOptions()
-    );
+    const res = await fetch(`/api${path}`, getOptions());
     return <R>res.json();
   },
   post: async <R>(path: string, body: unknown) => {
     const res = await fetch(
-      `${LOCALHOST}${path}`,
+      `/api${path}`,
       getOptions({
         method: 'POST',
         body: JSON.stringify(body),

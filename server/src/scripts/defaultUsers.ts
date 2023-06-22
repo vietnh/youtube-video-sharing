@@ -3,16 +3,20 @@ import bcrypt from 'bcrypt';
 
 const defaultUsers: IUserProperties[] = [
   {
-    email: 'user1@yopmail.com',
-    password: 'user1',
+    email: 'mickey@yopmail.com',
+    password: 'mickey',
   },
   {
-    email: 'user2@yopmail.com',
-    password: 'user2',
+    email: 'minnie@yopmail.com',
+    password: 'minnie',
   },
   {
-    email: 'user3@yopmail.com',
-    password: 'user3',
+    email: 'donald@yopmail.com',
+    password: 'donald',
+  },
+  {
+    email: 'daisy@yopmail.com',
+    password: 'daisy',
   },
 ];
 

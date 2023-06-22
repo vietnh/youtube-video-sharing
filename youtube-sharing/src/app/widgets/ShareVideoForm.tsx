@@ -2,18 +2,13 @@
 import { useState } from 'react';
 import Button from '../components/Button';
 import client from '../lib/api';
-import socket from '../lib/socket';
-import Cookie from 'js-cookie';
 
 export default function ShareForm() {
   const [url, setUrl] = useState('');
-  const shareVideo = async () => {
-    const res = await client.post('/videos', {
+  const shareVideo = async () =>
+    client.post('/videos', {
       url,
     });
-    console.log(res);
-    socket.emit('message', `${Cookie.get('email')} shared a video: ${url}`)
-  };
 
   return (
     <>

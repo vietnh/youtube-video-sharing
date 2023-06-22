@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   server:
-    build: 
+    build:
       context: ./server
     ports:
       - '3001:3001'
@@ -11,21 +11,21 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    environment:
-      - MONGO_URI=mongodb://mongodb:27017/youtube-sharing
-  # app:
-  #   build:
-  #     context: ./youtube-sharing
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
-  #   environment:
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - server
-  #     - mongodb
+    networks:
+      - youtube-sharing-network
+  app:
+    build:
+      context: ./youtube-sharing
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - youtube-sharing-network
+    depends_on:
+      - server
+      - mongodb
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -33,6 +33,12 @@ services:
       - mongodb-data:/data/db
     ports:
       - '27017:27017'
+    networks:
+      - youtube-sharing-network
 
 volumes:
   mongodb-data:
+
+networks:
+  youtube-sharing-network:
+    driver: bridge

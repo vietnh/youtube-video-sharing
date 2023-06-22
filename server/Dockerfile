@@ -2,6 +2,8 @@ FROM node:18
 
 WORKDIR /server
 
+ENV MONGO_URI=mongodb://mongodb:27017/youtube-sharing
+
 COPY *.json ./
 
 RUN npm ci
